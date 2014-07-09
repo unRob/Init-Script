@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo ""
+echo "### INIT SCRIPT ###"
+echo ""
 function pause(){
 	read -p "Presiona enter cuando acabe ese pedo"
 }
@@ -16,8 +19,8 @@ function nombre(){
 	fi
 
 	echo "$COMPUTAR_NAME ($COMPUTAR_SUBNET_NAME)"
-	#systemsetup -setcomputername $COMPUTAR_NAME
-	#systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
+	systemsetup -setcomputername $COMPUTAR_NAME
+	systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
 }
 
 nombre
