@@ -7,6 +7,20 @@ function pause(){
 	read -p "Presiona enter cuando acabe ese pedo"
 }
 
+echo "Descargando archivos privados..."
+# esto lo cree con `tar -cz -f - private | openssl aes-256-cbc -out private.tgz.enc`
+curl -s http://rob.mx/private.tgz.enc 2>&1 1 \
+    | openssl aes-256-cbc -d \
+    | tar xfz -
+
+if [ ! -d "./private" ]; then
+	echo "No pude desencriptar el archivo :/"
+	exit 255
+fi
+
+mv -v private/ssh ~/.ssh
+
+
 # Cambiar nombre de la compu
 function nombre(){
 	read -e -p "¿Cómo se llama esta compu? " COMPUTAR_NAME
@@ -25,14 +39,7 @@ function nombre(){
 
 nombre
 
-echo "Descargando archivos privados..."
-# esto lo cree con `tar -cz -f - private | openssl aes-256-cbc -out private.tgz.enc`
-curl -s http://rob.mx/private.tgz.enc 2>&1 1 \
-    | openssl aes-256-cbc -d \
-    | tar xfz -
 
-
-mv -v private/ssh ~/.ssh
 
 echo "Autorizando a Jimi y a Rob descagar tu sistema via SSH"
 sudo systemsetup -setremotelogin on
