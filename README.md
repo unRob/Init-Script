@@ -9,7 +9,7 @@ Dos veces.
 ## Roberto del futuro:
 
 1. Shit happens,
-2. http://youtu.be/vVof0qj7SOw?t=4s
+2. http://www.youtube.com/watch?v=x9Huy-JP1xo&feature=youtu.be&t=3s
 3. `curl -L https://github.com/unRob/Init-Script/raw/master/init.sh | sh`
 
 
