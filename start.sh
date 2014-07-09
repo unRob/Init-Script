@@ -41,6 +41,7 @@ mkdir -v /usr/local/var
 mkdir -v /usr/local/gems
 mkdir -v /usr/local/npm
 
+
 function sublime_text() {
 	echo "Descargando SublimeText 3"
 	open "http://www.sublimetext.com/3"
@@ -122,4 +123,5 @@ open /Applications/iTerm.app
 rm -rf ./private
 
 echo "Listo, ahora corre ./config.sh en iTerm"
-exit
+read -p "Presiona enter para cerrar este pedo"
+osascript -e 'tell application "Terminal" to quit'
