@@ -9,6 +9,8 @@ function pause(){
 }
 
 
+echo "### Config ###"
+
 
 echo "Instalando Homebrew"
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
