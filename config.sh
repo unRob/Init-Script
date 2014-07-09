@@ -63,12 +63,15 @@ echo "Instalando nginx $NGINX_VERSION"
 # no-sometimes-uninitialized porque pushmodule
 NGINX_LOGS=~/Library/logs/nginx
 NGINX_VAR=/usr/local/var/nginx
+NGINX_ETC=/usr/local/etc/nginx
+PASSENGER_ROOT=$(passenger-config --root)
+RUBY_ROOT=$(which ruby)
 ./configure \
     --with-ld-opt="-L /usr/local/lib" \
     --prefix=/usr/local/nginx \
     --with-cc-opt=-I/usr/local/include \
     --with-cc-opt="-Wno-sometimes-uninitialized -Wno-deprecated-declarations" \
-    --conf-path=/usr/local/etc/nginx/nginx.conf \
+    --conf-path=$NGINX_ETC/nginx.conf \
     --http-log-path=$NGINX_LOGS/nginx/access.log \
     --error-log-path=$NGINX_LOGS/nginx/error.log \
     --http-client-body-temp-path=$NGINX_VAR/body \
@@ -89,7 +92,7 @@ NGINX_VAR=/usr/local/var/nginx
     --add-module=../lua-nginx-module \
     --add-module=../ngx_http_set_hash \
     --add-module=../set-misc-nginx-module \
-    --add-module=`passenger-config --root`/ext/nginx
+    --add-module=$PASSENGER_ROOT/ext/nginx
 
 make
 mkdir -p ~/Library/logs/nginx
@@ -99,6 +102,15 @@ ln -sv /usr/local/nginx/sbin/nginx /usr/local/bin/
 echo "Instalando launchdaemon..."
 sudo cp -v $BASEPATH/config/org.nginx.plist /Library/LaunchDaemons/org.nginx.plist
 sudo chown root:wheel /Library/LaunchDaemons/org.nginx.plist
+echo "Pifando nginx.conf"
+cp -v $BASEPATH/config/nginx.conf /usr/local/etc/nginx/nginx.conf
+sed -i 's|NGINX_VAR|$NGINX_VAR|g' /usr/local/etc/nginx/nginx.conf
+sed -i 's|NGINX_LOGS|$NGINX_LOGS|g' /usr/local/etc/nginx/nginx.conf
+sed -i 's|NGINX_ETC|$NGINX_ETC|g' /usr/local/etc/nginx/nginx.conf
+sed -i 's|PASSENGER_ROOT|$PASSENGER_ROOT|g' /usr/local/etc/nginx/nginx.conf
+sed -i 's|RUBY_ROOT|$RUBY_ROOT|g' /usr/local/etc/nginx/nginx.conf
+
+
 
 
 # MongoDB
