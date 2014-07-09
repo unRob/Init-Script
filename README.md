@@ -4,7 +4,7 @@ Hace unos días empezó a dar las nalgas mi disco duro. Reinstalé, pero luego s
 
 Dos veces.
 
-**!NUNCA MÁS!**
+**¡NUNCA MÁS!**
 
 ## Roberto del futuro:
 
