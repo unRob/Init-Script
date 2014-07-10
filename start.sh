@@ -60,10 +60,15 @@ function sublime_text() {
 	echo <<PACKAGES
 	markdownediting
 	rsub
-	gitgutter
-	jshintgutter
-	Theme - Soda
 	nginx
+	ini
+	gitgutter
+	sublimelinter
+	sublimelinter-php
+	sublimelinter-jshint
+	sublimelinter-coffee
+	sublimelinter-ruby
+	Theme - Soda
 PACKAGES
 
 	ST_USER_PREFS="~/Library/Application Support/Packages/User/Preferences.sublime-settings"

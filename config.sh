@@ -114,11 +114,23 @@ sed -i 's|RUBY_ROOT|$RUBY_ROOT|g' /usr/local/etc/nginx/nginx.conf
 
 
 
+# dnsmasq
+echo "instalando dnsmasq (resolver dominios .dev)"
+brew install dnsmasq
+cp -v /usr/local/opt/dnsmasq/dnsmasq.conf.example /usr/local/etc/dnsmasq.conf
+sudo mkdir -pv /etc/resolver
+sudo tee /etc/resolver/dev >/dev/null <<EOF
+nameserver 127.0.0.1
+EOF
+echo "address=/dev/127.0.0.1" >> /usr/local/etc/dnsmasq.conf
+
+
 
 # MongoDB
 echo "Instalando MongoDB"
 brew install mongo
 ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
+
 
 
 # Github for Mac
@@ -148,8 +160,9 @@ open ~/Downloads/steam.dmg
 
 
 # stuff
-echo "Instalando ffmepg, redis, icu4c"
+echo "Instalando ffmepg, redis, icu4c, pkgconfig ghostscript imagemagickick"
 brew install ffmpeg redis icu4c
+ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
 # sin esta madre no jala imagemagick en PHP, Ruby
 brew install pkgconfig
 brew install ghostscript
