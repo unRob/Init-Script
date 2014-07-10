@@ -150,6 +150,10 @@ open ~/Downloads/steam.dmg
 # stuff
 echo "Instalando ffmepg, redis, icu4c"
 brew install ffmpeg redis icu4c
+# sin esta madre no jala imagemagick en PHP, Ruby
+brew install pkgconfig
+brew install ghostscript
+brew install imagemagick
 
 
 # PHP
@@ -160,3 +164,17 @@ brew install mysql
 brew install php55 --with-fpm --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl --with-imap --with-intl --with-libmysql --with-bz2
 brew install php55-intl php55-xdebug
 cp /usr/local/Cellar/php55/5.5.14/homebrew.mxcl.php55.plist ~/Library/LaunchAgents/
+
+PHP_INI=/usr/local/etc/php/5.5/php.ini
+
+echo "Siguiendo las instrucciones para descagar PEAR"
+chmod -R ug+w /usr/local/Cellar/php55/5.5.14/lib/php
+pear config-set php_ini $PHP_INI
+echo "Configurando PHP"
+sed -i 's/\;date\.timezone\ =/date\.timezone\ =\ America\/Mexico_City/g' $PHP_INI
+sed -i 's/\;default_charset\ =\ "UTF-8"/default_charset\ =\ "UTF-8"/g' $PHP_INI
+sed -i 's/error_reporting\ =\ E_ALL/error_reporting\ =\ E_ALL\ &\ ~E_DEPRECATED\ &\ ~E_STRICT\ &\ ~E_NOTICE/g' $PHP_INI
+sed -i 's/short_open_tag\ =\ Off/short_open_tag\ =\ On/g' $PHP_INI
+echo "Instalando paquetes de PHP"
+pecl install pecl_http mongo redis imagick
+pear channel-discover pear.swiftmailer.org && pear install swift/Swift
