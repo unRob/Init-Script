@@ -166,6 +166,7 @@ ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
 # sin esta madre no jala imagemagick en PHP, Ruby
 brew install pkgconfig
 brew install ghostscript
+sudo ln -sv /usr/local/bin/gs /usr/bin/gs #porque fucking php
 brew install imagemagick
 
 
@@ -189,5 +190,5 @@ sed -i 's/\;default_charset\ =\ "UTF-8"/default_charset\ =\ "UTF-8"/g' $PHP_INI
 sed -i 's/error_reporting\ =\ E_ALL/error_reporting\ =\ E_ALL\ &\ ~E_DEPRECATED\ &\ ~E_STRICT\ &\ ~E_NOTICE/g' $PHP_INI
 sed -i 's/short_open_tag\ =\ Off/short_open_tag\ =\ On/g' $PHP_INI
 echo "Instalando paquetes de PHP"
-pecl install pecl_http mongo redis imagick
+pecl install pecl_http mongo redis imagick xdebug
 pear channel-discover pear.swiftmailer.org && pear install swift/Swift
