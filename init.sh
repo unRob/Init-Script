@@ -17,5 +17,9 @@ fi
 
 mv -v private/ssh ~/.ssh
 
+echo "Instalando Command Line Tools"
+xcode-select -—install
+pause
+
 git clone git@github.com:unRob/Init-Script.git init
 cd init && ./start.sh
