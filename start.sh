@@ -4,6 +4,12 @@ function pause(){
 	read -p "Presiona enter cuando acabe ese pedo"
 }
 
+handle_error() {
+    echo "FAIL: line $1, exit code $2"
+    exit 1
+}
+
+trap 'handle_error $LINENO $?' ERR 
 
 echo "Vamos a settear madres..."
 echo ""
@@ -21,8 +27,8 @@ function nombre(){
 	fi
 
 	echo "$COMPUTAR_NAME ($COMPUTAR_SUBNET_NAME)"
-	systemsetup -setcomputername $COMPUTAR_NAME
-	systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
+	sudo systemsetup -setcomputername $COMPUTAR_NAME
+	sudo systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
 }
 
 nombre
@@ -104,13 +110,13 @@ pause
 # ZSH
 echo "Cambiando el shell a ZSH"
 chsh -s /bin/zsh
-echo "Instalando Oh My ZSH"
-curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/oh-my-zsh sh
 
 # Dotfiles
 echo "Clonando dotfiles"
 git clone git@github.com:/unRob/dotfiles.git .dotfiles
 
+echo "Instalando Oh My ZSH"
+curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/oh-my-zsh sh
 
 echo "Copiando .zshrc"
 ln -s .dotfiles/zshrc.dotfile .zshrc
