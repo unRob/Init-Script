@@ -101,11 +101,6 @@ cp dejavu-fonts-ttf-2.34/ttf/*.ttf ~/Library/Fonts
 rm -rf dejavu.tar.bz2
 rm -rf dejavu-fonts-ttf-2.34
 
-echo "Instalando Command Line Tools"
-xcode-select -—install
-pause
-
-
 
 # ZSH
 echo "Cambiando el shell a ZSH"
