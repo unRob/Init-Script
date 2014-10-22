@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+launchctl setenv GEM_PATH /usr/local/gems
+launchctl setenv GEM_HOME /usr/local/gems

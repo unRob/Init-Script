@@ -1,4 +1,12 @@
 #!/bin/bash
+handle_error() {
+    echo "FAIL: line $1, exit code $2"
+    exit 1
+}
+
+trap 'handle_error $LINENO $?' ERR 
+
+
 # Sublime Text
 
 #FILE=$(readlink "$0")
@@ -13,12 +21,19 @@ echo "### Config ###"
 
 
 echo "Instalando Homebrew"
-ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew doctor
 echo "Instalando ruby, node, git"
 brew install ruby node git
 echo "Mandando a la verga git viejo de OSX"
 sudo mv /usr/bin/git /usr/bin/git.original
+
+echo "Descagando GEM_* para launchctl"
+#https://stackoverflow.com/questions/25385934/yosemite-launchd-conf-no-longer-work/26477515#26477515
+sudo cp -v "$BASEPATH/lib/config/etc-environment" /etc/environment
+sudo chmod +x /etc/environment
+sudo cp -v "$BASEPATH/lib/config/launchdaemons-environment.plist" /Library/LaunchDaemons/environment.plist
+
 
 echo "Instalando Lunchy"
 gem install lunchy
@@ -39,7 +54,7 @@ open https://www.dropbox.com/install
 # Nginx + friends
 echo "### Nginx ###"
 gem install passenger
-brew install luajit wget pcre geoip
+brew install lua luajit wget pcre geoip
 
 mkdir -v src && cd src
 
