@@ -127,6 +127,8 @@ sed -i -e 's|NGINX_ETC|'$NGINX_ETC'|g' /usr/local/etc/nginx/nginx.conf
 sed -i -e 's|PASSENGER_ROOT|'$PASSENGER_ROOT'|g' /usr/local/etc/nginx/nginx.conf
 sed -i -e 's|RUBY_ROOT|'$RUBY_ROOT'|g' /usr/local/etc/nginx/nginx.conf
 
+echo "Configurando logrotate"
+cp $BASEPATH/logrotate/*.log /etc/newsyslog.d/
 
 
 # dnsmasq
