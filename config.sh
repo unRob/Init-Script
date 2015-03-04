@@ -27,6 +27,8 @@ echo "Hay que modificar ENV de sudo..."
 echo 'Defaults        env_keep += "GEM_HOME"' | pbcopy
 echo "Agrega la línea del clipboard a este pedo y guárdalo"
 sudo visudo
+echo "Actualizando /etc/launchd.conf para que los gems chidos sean los míos"
+echo "setenv GEM_HOME /usr/local/gems" | sudo tee -a /etc/launchd.conf
 
 
 
@@ -63,7 +65,7 @@ cd nginx-$NGINX_VERSION
 echo "Instalando nginx $NGINX_VERSION"
 # no-deprecated-declarations porque MD5 en ngx_crypt...
 # no-sometimes-uninitialized porque pushmodule
-NGINX_LOGS=~/Library/logs/nginx
+NGINX_LOGS=~/Library/Logs/nginx
 NGINX_VAR=/usr/local/var/nginx
 NGINX_ETC=/usr/local/etc/nginx
 PASSENGER_ROOT=$(passenger-config --root)
@@ -74,8 +76,8 @@ RUBY_ROOT=$(which ruby)
     --with-cc-opt=-I/usr/local/include \
     --with-cc-opt="-Wno-sometimes-uninitialized -Wno-deprecated-declarations" \
     --conf-path=$NGINX_ETC/nginx.conf \
-    --http-log-path=$NGINX_LOGS/nginx/access.log \
-    --error-log-path=$NGINX_LOGS/nginx/error.log \
+    --http-log-path=$NGINX_LOGS/access.log \
+    --error-log-path=$NGINX_LOGS/error.log \
     --http-client-body-temp-path=$NGINX_VAR/body \
     --http-fastcgi-temp-path=$NGINX_VAR/fastcgi \
     --http-proxy-temp-path=$NGINX_VAR/proxy \
@@ -97,7 +99,7 @@ RUBY_ROOT=$(which ruby)
     --add-module=$PASSENGER_ROOT/ext/nginx
 
 make
-mkdir -p ~/Library/logs/nginx
+mkdir -p $NGINX_LOGS
 make install
 ln -sv /usr/local/nginx/sbin/nginx /usr/local/bin/
 
