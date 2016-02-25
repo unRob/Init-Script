@@ -1,4 +1,12 @@
 #!/bin/bash
+handle_error() {
+    echo "FAIL: line $1, exit code $2"
+    exit 1
+}
+
+trap 'handle_error $LINENO $?' ERR
+
+
 # Sublime Text
 
 #FILE=$(readlink "$0")
@@ -13,12 +21,19 @@ echo "### Config ###"
 
 
 echo "Instalando Homebrew"
-ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew doctor
 echo "Instalando ruby, node, git"
 brew install ruby node git
 echo "Mandando a la verga git viejo de OSX"
 sudo mv /usr/bin/git /usr/bin/git.original
+
+echo "Descagando GEM_* para launchctl"
+#https://stackoverflow.com/questions/25385934/yosemite-launchd-conf-no-longer-work/26477515#26477515
+sudo cp -v "$BASEPATH/lib/config/etc-environment" /etc/environment
+sudo chmod +x /etc/environment
+sudo cp -v "$BASEPATH/lib/config/launchdaemons-environment.plist" /Library/LaunchDaemons/environment.plist
+
 
 echo "Instalando Lunchy"
 gem install lunchy
@@ -31,6 +46,10 @@ echo "Actualizando /etc/launchd.conf para que los gems chidos sean los míos"
 echo "setenv GEM_HOME /usr/local/gems" | sudo tee -a /etc/launchd.conf
 
 
+echo "Instalando Cask"
+brew tap caskroom/cask
+brew cask install qlmarkdown betterzipql qlcolorcode qlstephen quicklook-json
+
 
 # Dropbox
 echo "Vas a bajar dropbox"
@@ -41,14 +60,14 @@ open https://www.dropbox.com/install
 # Nginx + friends
 echo "### Nginx ###"
 gem install passenger
-brew install luajit wget pcre geoip
+brew install lua luajit wget pcre geoip
 
 mkdir -v src && cd src
 
 export LUAJIT_LIB=/usr/local/lib
 export LUAJIT_INC=/usr/local/include/luajit-2.0
 
-NGINX_VERSION='1.6.0'
+NGINX_VERSION='1.6.2'
 wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 tar xfz nginx-$NGINX_VERSION.tar.gz
 wget http://pushmodule.slact.net/downloads/nginx_http_push_module-0.692.tar.gz
@@ -108,12 +127,14 @@ sudo cp -v $BASEPATH/config/org.nginx.plist /Library/LaunchDaemons/org.nginx.pli
 sudo chown root:wheel /Library/LaunchDaemons/org.nginx.plist
 echo "Pifando nginx.conf"
 cp -v $BASEPATH/config/nginx.conf /usr/local/etc/nginx/nginx.conf
-sed -i 's|NGINX_VAR|$NGINX_VAR|g' /usr/local/etc/nginx/nginx.conf
-sed -i 's|NGINX_LOGS|$NGINX_LOGS|g' /usr/local/etc/nginx/nginx.conf
-sed -i 's|NGINX_ETC|$NGINX_ETC|g' /usr/local/etc/nginx/nginx.conf
-sed -i 's|PASSENGER_ROOT|$PASSENGER_ROOT|g' /usr/local/etc/nginx/nginx.conf
-sed -i 's|RUBY_ROOT|$RUBY_ROOT|g' /usr/local/etc/nginx/nginx.conf
+sed -i -e 's|NGINX_VAR|'$NGINX_VAR'|g' /usr/local/etc/nginx/nginx.conf
+sed -i -e 's|NGINX_LOGS|'$NGINX_LOGS'|g' /usr/local/etc/nginx/nginx.conf
+sed -i -e 's|NGINX_ETC|'$NGINX_ETC'|g' /usr/local/etc/nginx/nginx.conf
+sed -i -e 's|PASSENGER_ROOT|'$PASSENGER_ROOT'|g' /usr/local/etc/nginx/nginx.conf
+sed -i -e 's|RUBY_ROOT|'$RUBY_ROOT'|g' /usr/local/etc/nginx/nginx.conf
 
+echo "Configurando logrotate"
+cp $BASEPATH/logrotate/*.log /etc/newsyslog.d/
 
 
 # dnsmasq
@@ -124,8 +145,9 @@ sudo mkdir -pv /etc/resolver
 sudo tee /etc/resolver/dev >/dev/null <<EOF
 nameserver 127.0.0.1
 EOF
-echo "address=/dev/127.0.0.1" >> /usr/local/etc/dnsmasq.conf
-
+echo "\naddress=/dev/127.0.0.1" >> /usr/local/etc/dnsmasq.conf
+sudo cp -fv /usr/local/opt/dnsmasq/*.plist /Library/LaunchDaemons
+sudo chown root /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 
 
 # MongoDB
@@ -148,8 +170,8 @@ open http://www.skype.com/en/download-skype/skype-for-mac/downloading/
 # Chrome, Firefox
 echo "Bajando Chrome"
 open https://www.google.com/intl/en/chrome/browser/thankyou.html
-echo "Bajando Firefox 30.0"
-open https://download.mozilla.org/?product=firefox-30.0-SSL&os=osx&lang=en-US
+echo "Bajando Firefox 35.0"
+open https://download.mozilla.org/?product=firefox-35.0-SSL&os=osx&lang=en-US
 
 # Transmission
 echo "Bajando Transmission"
@@ -178,20 +200,20 @@ brew tap homebrew/dupes
 brew tap homebrew/versions
 brew tap homebrew/homebrew-php
 brew install mysql
-brew install php55 --with-fpm --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl --with-imap --with-intl --with-libmysql --with-bz2
+brew install php55 --with-fpm --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl --with-imap --with-intl --with-libmysql --with-bz2 --without-snmp
 brew install php55-intl php55-xdebug
 cp /usr/local/Cellar/php55/5.5.14/homebrew.mxcl.php55.plist ~/Library/LaunchAgents/
 
 PHP_INI=/usr/local/etc/php/5.5/php.ini
 
 echo "Siguiendo las instrucciones para descagar PEAR"
-chmod -R ug+w /usr/local/Cellar/php55/5.5.14/lib/php
+chmod -R ug+w /usr/local/Cellar/php55/5.5.19/lib/php
 pear config-set php_ini $PHP_INI
 echo "Configurando PHP"
-sed -i 's/\;date\.timezone\ =/date\.timezone\ =\ America\/Mexico_City/g' $PHP_INI
-sed -i 's/\;default_charset\ =\ "UTF-8"/default_charset\ =\ "UTF-8"/g' $PHP_INI
-sed -i 's/error_reporting\ =\ E_ALL/error_reporting\ =\ E_ALL\ &\ ~E_DEPRECATED\ &\ ~E_STRICT\ &\ ~E_NOTICE/g' $PHP_INI
-sed -i 's/short_open_tag\ =\ Off/short_open_tag\ =\ On/g' $PHP_INI
+sed -i -e 's/\;date\.timezone\ =/date\.timezone\ =\ America\/Mexico_City/g' $PHP_INI
+sed -i -e 's/\;default_charset\ =\ "UTF-8"/default_charset\ =\ "UTF-8"/g' $PHP_INI
+sed -i -e 's/error_reporting\ =\ E_ALL/error_reporting\ =\ E_ALL\ &\ ~E_DEPRECATED\ &\ ~E_STRICT\ &\ ~E_NOTICE/g' $PHP_INI
+sed -i -e 's/short_open_tag\ =\ Off/short_open_tag\ =\ On/g' $PHP_INI
 echo "Instalando paquetes de PHP"
 pecl install pecl_http mongo redis imagick xdebug
 pear channel-discover pear.swiftmailer.org && pear install swift/Swift

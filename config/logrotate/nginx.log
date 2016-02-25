@@ -1,0 +1,5 @@
+# logfilename					[owner:group]   mode	count	size	when	flags	[/pid_file]			[sig_num]
+/Users/rob/Library/logs/nginx					644		7		1024	*		JC		/var/run/nginx.pid	30
+/Users/rob/Library/logs/nginx					644		7		1024	*		JC		/var/run/nginx.pid	30
+
+#/Users/rob/Sites/**/.nginx/log

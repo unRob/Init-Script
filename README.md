@@ -10,7 +10,7 @@ Dos veces.
 
 1. Shit happens,
 2. http://youtu.be/x9Huy-JP1xo?t=3s
-3. `curl -L https://github.com/unRob/Init-Script/raw/master/init.sh | sh`
+3. `curl -L https://github.com/unRob/Init-Script/raw/master/init.sh; chmod +x init.sh && ./init.sh`
 
 
 ## Licencia

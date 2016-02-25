@@ -4,6 +4,12 @@ function pause(){
 	read -p "Presiona enter cuando acabe ese pedo"
 }
 
+handle_error() {
+    echo "FAIL: line $1, exit code $2"
+    exit 1
+}
+
+trap 'handle_error $LINENO $?' ERR
 
 echo "Vamos a settear madres..."
 echo ""
@@ -13,7 +19,7 @@ echo ""
 function nombre(){
 	read -e -p "¿Cómo se llama esta compu? " COMPUTAR_NAME
 
-	COMPUTAR_SUBNET_NAME=`echo $COMPUTAR_NAME | iconv -f utf8 -t us-ascii//TRANSLIT//IGNORE | tr -cd '[[:alnum:]._-]' | awk '{print tolower($0)}'` 
+	COMPUTAR_SUBNET_NAME=`echo $COMPUTAR_NAME | iconv -f utf8 -t us-ascii//TRANSLIT//IGNORE | tr -cd '[[:alnum:]._-]' | awk '{print tolower($0)}'`
 	read -e -p "¿Y, de cariño? (${COMPUTAR_SUBNET_NAME}.local) " SUBNET_NAME
 
 	if [ -n "$SUBNET_NAME" ]; then
@@ -21,8 +27,8 @@ function nombre(){
 	fi
 
 	echo "$COMPUTAR_NAME ($COMPUTAR_SUBNET_NAME)"
-	systemsetup -setcomputername $COMPUTAR_NAME
-	systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
+	sudo systemsetup -setcomputername $COMPUTAR_NAME
+	sudo systemsetup -setlocalsubnetname $COMPUTAR_SUBNET_NAME
 }
 
 nombre
@@ -32,6 +38,21 @@ nombre
 echo "Autorizando a Jimi y a Rob descagar tu sistema via SSH"
 sudo systemsetup -setremotelogin on
 
+echo "Configurando valores de Energía"
+# conectada
+sudo /usr/bin/pmset -c sleep 0
+sudo /usr/bin/pmset -c displaysleep 60
+# batería
+sudo /usr/bin/pmset -b sleep 60
+sudo /usr/bin/pmset -c displaysleep 15
+# auto-restart after power loss
+sudo systemsetup -setrestartfreeze on
+sudo systemsetup -setrestartpowerfailure on
+sudo systemsetup -setwaitforstartupafterpowerfailure 0
+
+echo "Prendiendo Firewall"
+sudo /usr/bin/defaults write /Library/Preferences/com.apple.alf globalstate -int 1
+sudo /usr/bin/defaults write /Library/Preferences/com.apple.alf stealthenabled -int 1
 
 echo "Creando directorios en /usr/local"
 sudo mkdir -v /usr/local
@@ -46,7 +67,7 @@ function sublime_text() {
 	echo "Descargando SublimeText 3"
 	open "http://www.sublimetext.com/3"
 	echo "Copiando licencia de ST al clipboard"
-	cat private/sublime.st-license | pbcopy 
+	cat private/sublime.st-license | pbcopy
 	open /Applications/SublimeText.app
 
 	pause
@@ -78,11 +99,11 @@ PACKAGES
 
 	echo "Symlinkeando subl"
 	ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
-} 
+}
 
 
 
-echo "Descargando iTerm" 
+echo "Descargando iTerm"
 curl -O -L http://iterm2.com/downloads/stable/iTerm2_v1_0_0.zip
 unzip iTerm2_v1_0_0.zip -d /Applications/
 rm iTerm2_v1_0_0.zip
@@ -95,22 +116,18 @@ cp dejavu-fonts-ttf-2.34/ttf/*.ttf ~/Library/Fonts
 rm -rf dejavu.tar.bz2
 rm -rf dejavu-fonts-ttf-2.34
 
-echo "Instalando Command Line Tools"
-xcode-select -—install
-pause
-
-
-
-# ZSH
-echo "Cambiando el shell a ZSH"
-chsh -s /bin/zsh
-echo "Instalando Oh My ZSH"
-curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/oh-my-zsh sh
 
 # Dotfiles
 echo "Clonando dotfiles"
 git clone git@github.com:/unRob/dotfiles.git .dotfiles
 
+echo "Instalando Oh My ZSH"
+git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.dotfiles/oh-my-zsh
+# curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | ZSH=~/.dotfiles/oh-my-zsh sh
+
+# ZSH
+echo "Cambiando el shell a ZSH"
+chsh -s `which zsh`
 
 echo "Copiando .zshrc"
 ln -s .dotfiles/zshrc.dotfile .zshrc
