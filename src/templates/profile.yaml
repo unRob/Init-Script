@@ -1,0 +1,122 @@
+payload-description: Roberto's Computar profile
+payload-display-name: Personal Computar
+payload-identifier: mx.rob.personal-computar
+payload-uuid:
+payload-type: Configuration
+payload-version: 1
+payload-content:
+  - payload-type: com.apple.MCX.FileVault2
+    payload-display-name: Filevault
+    payload-description: Enables full disk encryption
+    payload-version: 1
+    payload-identifier: mx.rob.personal-computar.filevault2
+    payload-UUID:
+    enable: 'On'
+    defer: false
+    show-recovery-key: true
+    output-path: /Users/rob/Desktop/private/
+    username: rob
+    user-enters-missing-info: true
+  - payload-type: com.apple.screensaver
+    payload-display-name: Screensaver
+    payload-description: Configures the screensaver
+    payload-version: 1
+    payload-identifier: mx.rob.personal-computar.screensaver
+    payload-UUID:
+    ask-for-password: true
+    ask-for-password-delay: 5
+    module-path: /Users/rob/Library/Screen Savers/mx.rob.api.screensaver
+    idle-time: 0
+  - payload-type: com.apple.systempolicy.control
+    payload-display-name: Gatekeeper
+    payload-description: Enables checks for app signing
+    payload-version: 1
+    payload-identifier: mx.rob.personal-computar.gatekeeper
+    payload-UUID:
+    enable-assessment: true
+    allow-identified-developers: true
+  - payload-type: com.apple.dock
+    payload-display-name: Dock
+    payload-description: Configures the dock
+    payload-version: 1
+    payload-identifier: mx.rob.personal-computar.dock
+    payload-UUID: ''
+    orientation: botom
+    autohide: '1'
+    magnification: '1'
+    largesize: '69'
+    launchanim: '1'
+    persistent-apps:
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.apple.systempreferences
+          dock-extra: 1
+          file-label: System Preferences
+          file-type: 41
+          url: file:///Applications/System%20Preferences.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.googlecode.iterm2
+          dock-extra: 0
+          file-label: iTerm
+          file-type: 41
+          url: file:///Applications/iTerm.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.spotify.client
+          dock-extra: 0
+          file-label: Spotify
+          file-type: 41
+          url: file:///opt/homebrew-cask/Caskroom/spotify/latest/Spotify.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.sublimetext.3
+          dock-extra: 0
+          file-label: Sublime Text
+          file-type: 41
+          url: file:///Applications/Sublime%20Text.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.apple.Safari
+          dock-extra: 0
+          file-label: Safari
+          file-type: 41
+          url: file:///Applications/Safari.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: it.bloop.airmail2
+          dock-extra: 0
+          file-label: Airmail 2
+          file-type: 41
+          url: file:///Applications/Airmail%202.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.tinyspeck.slackmacgap
+          dock-extra: 0
+          file-label: Slack
+          file-type: 41
+          url: file:///Applications/Slack.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.apple.iChat
+          dock-extra: 1
+          file-label: Messages
+          file-type: 41
+          url: file:///Applications/Messages.app/
+      - tile-type: file-tile
+        tile-data:
+          bundle-identifier: com.tapbots.Tweetbot3Mac
+          dock-extra: 0
+          file-label: Tweetbot
+          file-type: 1
+          url: file:///Applications/Tweetbot.localized/Tweetbot.app/
+    persistent-others:
+      - tile-type: directory-tile
+        tile-data:
+          file-label: Downloads
+          file-type: 2
+          url: file:///Users/rob/Downloads/
+          showas: 2
+          arrangement: 2
+          displayas: 1
+

@@ -3,9 +3,9 @@
 # Descaga el repeat del teclado (no presentando opciones de acentuación)
 defaults write -g ApplePressAndHoldEnabled -bool false
 defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool true # Trackpad: swipe between pages with three fingers
-defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 # Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1 # Trackpad: enable tap to click for this user and for the login screen
-defaults write NSGlobalDomain KeyRepeat -int 0 # Set a blazingly fast keyboard repeat rate
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain KeyRepeat -int 0
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true # Expand save panel by default
 defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false # Disable Resume system-wide
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
