@@ -5,8 +5,8 @@ function pause(){
 }
 
 handle_error() {
-    echo "FAIL: line $1, exit code $2"
-    exit 1
+  echo "FAIL: line $1, exit code $2"
+  exit 1
 }
 
 trap 'handle_error $LINENO $?' ERR
@@ -44,7 +44,7 @@ sudo /usr/bin/pmset -c sleep 0
 sudo /usr/bin/pmset -c displaysleep 60
 # batería
 sudo /usr/bin/pmset -b sleep 60
-sudo /usr/bin/pmset -c displaysleep 15
+sudo /usr/bin/pmset -b displaysleep 15
 # auto-restart after power loss
 sudo systemsetup -setrestartfreeze on
 sudo systemsetup -setrestartpowerfailure on
